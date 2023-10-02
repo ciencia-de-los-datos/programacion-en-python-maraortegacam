@@ -46,7 +46,15 @@ def pregunta_02():
     ]
 
     """
-    return
+    letras = {}
+
+    for row in data:
+        if row[0] in letras.keys():
+            letras[row[0]] += 1
+        else:
+            letras[row[0]] = 1
+    
+    return sorted(letras.items())
 
 
 def pregunta_03():
