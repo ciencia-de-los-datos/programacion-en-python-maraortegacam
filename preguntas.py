@@ -11,7 +11,9 @@ Utilice el archivo `data.csv` para resolver las preguntas.
 
 
 """
+import csv
 
+data = csv.reader(open('data.csv'), delimiter="\t")
 
 def pregunta_01():
     """
@@ -21,7 +23,12 @@ def pregunta_01():
     214
 
     """
-    return
+    suma = 0
+
+    for row in data:
+        suma += int(row[1])
+
+    return suma
 
 
 def pregunta_02():
@@ -39,7 +46,15 @@ def pregunta_02():
     ]
 
     """
-    return
+    letras = {}
+
+    for row in data:
+        if row[0] in letras.keys():
+            letras[row[0]] += 1
+        else:
+            letras[row[0]] = 1
+    
+    return sorted(letras.items())
 
 
 def pregunta_03():
@@ -57,7 +72,16 @@ def pregunta_03():
     ]
 
     """
-    return
+    
+    letras2 = {}
+
+    for row in data:
+        if row[0] in letras2.keys():
+            letras2[row[0]] += int(row[1])
+        else:
+            letras2[row[0]] = int(row[1])
+
+    return sorted(letras2.items())
 
 
 def pregunta_04():
@@ -82,7 +106,17 @@ def pregunta_04():
     ]
 
     """
-    return
+    
+    mes = {}
+
+    for row in data:
+        meses = row[2].split("-")[1]
+        if meses in mes.keys():
+            mes[meses] += 1
+        else:
+            mes[meses] = 1
+
+    return sorted(mes.items())
 
 
 def pregunta_05():
@@ -100,7 +134,19 @@ def pregunta_05():
     ]
 
     """
-    return
+    tupla = {}
+
+    for row in data:
+        num = int(row[1])
+        if row[0] in tupla.keys():
+            if num > tupla[row[0]][0]:
+                tupla[row[0]][0] = num
+            if num < tupla[row[0]][1]:
+                tupla[row[0]][1] = num
+        else:
+            tupla[row[0]] = [num,num]
+    return [(rw[0],rw[1][0],rw[1][1]) for rw in sorted(tupla.items())]
+    
 
 
 def pregunta_06():
@@ -125,7 +171,22 @@ def pregunta_06():
     ]
 
     """
-    return
+    letras = {}
+
+    for row in data:
+        for i in row[4].split(","):
+            key = i.split(":")[0]
+            number = int(i.split(":")[1])
+        
+            if key in letras.keys():
+                if number < letras[key][0]:
+                    letras[key][0] = number
+                if number > letras[key][1]:
+                    letras[key][1] = number
+            else:
+                letras[key] = [number,number]
+
+    return [(rw[0],rw[1][0],rw[1][1]) for rw in sorted(letras.items())]
 
 
 def pregunta_07():
@@ -149,7 +210,14 @@ def pregunta_07():
     ]
 
     """
-    return
+    col2 = {}
+
+    for row in data:
+        if int(row[1]) in col2.keys():
+            col2[int(row[1])][0].append(row[0])
+        else:
+            col2[int(row[1])] = [[row[0]]]
+    return [(rw[0],rw[1][0]) for rw in sorted(col2.items())]
 
 
 def pregunta_08():
@@ -174,7 +242,17 @@ def pregunta_08():
     ]
 
     """
-    return
+    col2 = {}
+
+    for row in data:
+        if int(row[1]) in col2.keys():
+            if row[0] in col2[int(row[1])][0]:
+                pass
+            else:
+                col2[int(row[1])][0].append(row[0])
+        else:
+            col2[int(row[1])] = [[row[0]]]
+    return [(rw[0],sorted(rw[1][0])) for rw in sorted(col2.items())]
 
 
 def pregunta_09():
@@ -197,7 +275,18 @@ def pregunta_09():
     }
 
     """
-    return
+    diccionario = {}
+
+    for row in data:
+        for i in row[4].split(","):
+            key = i.split(":")[0]
+        
+            if key in diccionario.keys():
+                diccionario[key] +=1
+            else:
+                diccionario[key] = 1
+
+    return dict(sorted(diccionario.items()))
 
 
 def pregunta_10():
@@ -218,7 +307,11 @@ def pregunta_10():
 
 
     """
-    return
+    lista = []
+
+    for row in data:
+        lista.append((row[0],len(row[3].split(",")),len(row[4].split(","))))
+    return lista
 
 
 def pregunta_11():
@@ -239,7 +332,17 @@ def pregunta_11():
 
 
     """
-    return
+    diccionario = {}
+
+    for row in data:
+        values = row[3].split(",")
+        for i in values:
+            if i in diccionario.keys():
+                diccionario[i] += int(row[1])
+            else:
+                diccionario[i] = int(row[1])
+
+    return dict(sorted(diccionario.items()))
 
 
 def pregunta_12():
@@ -257,4 +360,14 @@ def pregunta_12():
     }
 
     """
-    return
+    letras = {}
+
+    for row in data:
+        values = row[4].split(",")
+        dic_values = dict((rw.split(":")[0],int(rw.split(":")[1])) for rw in values)
+        if row[0] in letras.keys():
+            letras[row[0]] += sum(dic_values.values())
+        else:
+            letras[row[0]] = sum(dic_values.values())
+
+    return dict(sorted(letras.items()))
